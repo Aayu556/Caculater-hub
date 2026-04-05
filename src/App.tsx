@@ -462,15 +462,27 @@ export default function App() {
   const [bNum2, setBNum2] = useState('');
   const [basicRes, setBasicRes] = useState<number | string | null>(null);
 
-  useEffect(() => {
+  const calculateBasic = (op: 'add' | 'sub' | 'mul' | 'div') => {
     const n1 = parseFloat(bNum1);
     const n2 = parseFloat(bNum2);
-    if (!isNaN(n1) && !isNaN(n2)) {
-      setBasicRes(`Add: ${n1 + n2} | Sub: ${n1 - n2}`);
-    } else {
-      setBasicRes(null);
+    if (isNaN(n1) || isNaN(n2)) {
+      setBasicRes('❌ Enter valid numbers');
+      return;
     }
-  }, [bNum1, bNum2]);
+
+    switch (op) {
+      case 'add': setBasicRes(`➕ Result: ${n1 + n2}`); break;
+      case 'sub': setBasicRes(`➖ Result: ${n1 - n2}`); break;
+      case 'mul': setBasicRes(`✖ Result: ${n1 * n2}`); break;
+      case 'div': 
+        if (n2 === 0) {
+          setBasicRes('❌ Cannot divide by 0');
+        } else {
+          setBasicRes(`➗ Result: ${(n1 / n2).toFixed(2)}`);
+        }
+        break;
+    }
+  };
 
   const resetConstruction = () => {
     setLength('15');
@@ -1266,11 +1278,26 @@ export default function App() {
                     </div>
                   </div>
 
+                  <div className="grid grid-cols-2 gap-3">
+                    <button onClick={() => calculateBasic('add')} className="py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-2xl shadow-lg shadow-emerald-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                      ➕ Add
+                    </button>
+                    <button onClick={() => calculateBasic('sub')} className="py-4 bg-rose-500 hover:bg-rose-400 text-white font-black rounded-2xl shadow-lg shadow-rose-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                      ➖ Subtract
+                    </button>
+                    <button onClick={() => calculateBasic('mul')} className="py-4 bg-sky-500 hover:bg-sky-400 text-slate-950 font-black rounded-2xl shadow-lg shadow-sky-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                      ✖ Multiply
+                    </button>
+                    <button onClick={() => calculateBasic('div')} className="py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl shadow-lg shadow-amber-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                      ➗ Divide
+                    </button>
+                  </div>
+
                   {basicRes !== null && (
                     <div className="mt-4 p-6 bg-sky-500/5 rounded-3xl border border-sky-500/20 text-center sticky-result">
                       <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2">Result</p>
                       <p className="text-xl font-black text-white drop-shadow-[0_0_10px_rgba(14,165,233,0.3)]">
-                        {typeof basicRes === 'number' ? basicRes.toLocaleString() : basicRes}
+                        {basicRes}
                       </p>
                     </div>
                   )}
