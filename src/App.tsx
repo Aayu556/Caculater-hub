@@ -120,12 +120,12 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <div
       className="transition-transform duration-300 hover:scale-105"
       style={{
-        width: '90px',
-        height: '90px',
-        borderRadius: '22px',
+        width: '52px',
+        height: '52px',
+        borderRadius: '13px',
         overflow: 'hidden',
         flexShrink: 0,
-        boxShadow: '0 0 0 2px rgba(56,189,248,0.5), 0 0 18px rgba(0,150,255,1), 0 0 36px rgba(0,100,255,0.7), 0 0 60px rgba(0,60,255,0.4)',
+        boxShadow: '0 0 0 1.5px rgba(56,189,248,0.6), 0 0 14px rgba(0,150,255,1), 0 0 28px rgba(0,100,255,0.6)',
       }}
     >
       <img
@@ -135,30 +135,28 @@ const Logo = ({ className = "" }: { className?: string }) => (
         draggable={false}
       />
     </div>
-    <div className="flex flex-col items-start" style={{ lineHeight: 1.15 }}>
+    <div className="flex flex-col items-start" style={{ lineHeight: 1.2, gap: '1px' }}>
       <span
         style={{
-          fontSize: '11px',
-          fontStyle: 'italic',
-          letterSpacing: '0.12em',
-          fontWeight: 600,
-          background: 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          fontSize: '10px',
+          letterSpacing: '0.18em',
+          fontWeight: 700,
+          color: '#64748b',
+          textTransform: 'uppercase',
         }}
       >
-        SHREE
+        Shree
       </span>
       <span
         style={{
-          fontSize: '20px',
+          fontSize: '17px',
           fontWeight: 900,
-          letterSpacing: '0.04em',
-          background: 'linear-gradient(90deg, #ffffff 0%, #7dd3fc 40%, #38bdf8 70%, #0ea5e9 100%)',
+          letterSpacing: '0.03em',
+          background: 'linear-gradient(90deg, #e0f2fe 0%, #7dd3fc 35%, #38bdf8 65%, #0ea5e9 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          filter: 'drop-shadow(0 0 8px rgba(56,189,248,0.9)) drop-shadow(0 0 16px rgba(14,165,233,0.6))',
-          textTransform: 'uppercase',
+          filter: 'drop-shadow(0 0 6px rgba(56,189,248,1)) drop-shadow(0 0 12px rgba(14,165,233,0.7))',
+          textShadow: 'none',
         }}
       >
         Calculator Hub
@@ -995,7 +993,7 @@ export default function App() {
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-sky-500/30">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#020617]/80 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-4 group cursor-pointer" onClick={() => { setActiveTab('emi'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
             <Logo />
           </div>
@@ -1043,7 +1041,7 @@ export default function App() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-none px-6 py-4 text-sm font-medium transition-all flex items-center gap-2 border-b-2 ${
+              className={`flex-none px-4 py-2.5 text-sm font-medium transition-all flex items-center gap-2 border-b-2 ${
                 activeTab === tab.id 
                   ? 'border-sky-500 text-sky-400 bg-sky-500/5' 
                   : 'border-transparent text-slate-400'
@@ -1056,7 +1054,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-12 md:py-20">
+      <main className="max-w-4xl mx-auto px-4 py-4 md:py-8">
         {/* Search Results Overlay when searching */}
         {searchQuery && (
           <motion.div 
@@ -1405,14 +1403,14 @@ export default function App() {
                     </p>
                   </div>
                 </div>
-                <div className="space-y-10">
+                <div className="space-y-5">
                   <SliderGroup label="Loan Amount" value={loan} min="10000" max="10000000" step="10000" onChange={setLoan} unit="₹" icon={IndianRupee} color="cyan" />
                   <SliderGroup label="Interest Rate (p.a)" value={rate} min="1" max="25" step="0.1" onChange={setRate} unit="%" icon={Percent} color="emerald" />
                   <SliderGroup label="Loan Tenure" value={years} min="1" max="30" step="1" onChange={setYears} unit="Yr" icon={Calendar} color="sky" />
                   {emiResult && (
-                    <div className="mt-4 p-4 sm:p-8 bg-slate-900/80 rounded-2xl sm:rounded-[2.5rem] border-2 border-sky-500/30 space-y-4 sm:space-y-8 shadow-[0_0_50px_-12px_rgba(14,165,233,0.2)] sticky-result">
-                      <div className="flex flex-col lg:flex-row gap-4 sm:gap-10 items-center">
-                        <div className="flex-1 space-y-4 sm:space-y-8 w-full">
+                    <div className="mt-2 p-4 sm:p-6 bg-slate-900/80 rounded-2xl sm:rounded-3xl border-2 border-sky-500/30 space-y-3 sm:space-y-5 shadow-[0_0_50px_-12px_rgba(14,165,233,0.2)] sticky-result">
+                      <div className="flex flex-col lg:flex-row gap-3 sm:gap-6 items-center">
+                        <div className="flex-1 space-y-3 sm:space-y-4 w-full">
                           <div className="text-center lg:text-left space-y-1 sm:space-y-2">
                             <span className="text-cyan-400 font-black uppercase tracking-[0.2em] text-[10px] sm:text-xs">Monthly EMI</span>
                             <div className="flex items-baseline justify-center lg:justify-start gap-2">
@@ -1430,18 +1428,18 @@ export default function App() {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-3 gap-2 sm:gap-4">
-                            <div className="p-2 sm:p-4 bg-slate-800/40 rounded-xl sm:rounded-2xl border border-slate-700/50">
-                              <span className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Principal</span>
-                              <span className="text-xs sm:text-lg font-bold text-white">₹{emiResult.principal.toLocaleString()}</span>
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className="p-2.5 sm:p-4 bg-slate-800/40 rounded-xl border border-slate-700/50">
+                              <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Principal</span>
+                              <span className="text-[11px] sm:text-base font-bold text-white">₹{emiResult.principal.toLocaleString()}</span>
                             </div>
-                            <div className="p-2 sm:p-4 bg-slate-800/40 rounded-xl sm:rounded-2xl border border-slate-700/50">
-                              <span className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Interest</span>
-                              <span className="text-xs sm:text-lg font-bold text-cyan-400">₹{Math.round(emiResult.totalInterest).toLocaleString()}</span>
+                            <div className="p-2.5 sm:p-4 bg-slate-800/40 rounded-xl border border-slate-700/50">
+                              <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Interest</span>
+                              <span className="text-[11px] sm:text-base font-bold text-cyan-400">₹{Math.round(emiResult.totalInterest).toLocaleString()}</span>
                             </div>
-                            <div className="p-2 sm:p-4 bg-cyan-500/10 rounded-xl sm:rounded-2xl border border-cyan-500/20">
-                              <span className="text-[8px] sm:text-[10px] font-bold text-cyan-500/70 uppercase tracking-widest block mb-1">Total</span>
-                              <span className="text-xs sm:text-lg font-black text-cyan-400">₹{Math.round(emiResult.totalPayment).toLocaleString()}</span>
+                            <div className="p-2.5 sm:p-4 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
+                              <span className="text-[9px] sm:text-[10px] font-bold text-cyan-500/70 uppercase tracking-widest block mb-1">Total</span>
+                              <span className="text-[11px] sm:text-base font-black text-cyan-400">₹{Math.round(emiResult.totalPayment).toLocaleString()}</span>
                             </div>
                           </div>
 
