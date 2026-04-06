@@ -120,12 +120,12 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <div
       className="transition-transform duration-300 hover:scale-105"
       style={{
-        width: '52px',
-        height: '52px',
-        borderRadius: '13px',
+        width: '64px',
+        height: '64px',
+        borderRadius: '16px',
         overflow: 'hidden',
         flexShrink: 0,
-        boxShadow: '0 0 0 1.5px rgba(56,189,248,0.6), 0 0 14px rgba(0,150,255,1), 0 0 28px rgba(0,100,255,0.6)',
+        boxShadow: '0 0 0 2px rgba(56,189,248,0.7), 0 0 16px rgba(0,150,255,1), 0 0 32px rgba(0,100,255,0.7)',
       }}
     >
       <img
@@ -135,28 +135,29 @@ const Logo = ({ className = "" }: { className?: string }) => (
         draggable={false}
       />
     </div>
-    <div className="flex flex-col items-start" style={{ lineHeight: 1.2, gap: '1px' }}>
+    <div className="flex flex-col items-start" style={{ lineHeight: 1.15, gap: '2px' }}>
       <span
         style={{
-          fontSize: '10px',
-          letterSpacing: '0.18em',
-          fontWeight: 700,
-          color: '#64748b',
+          fontSize: '13px',
+          letterSpacing: '0.22em',
+          fontWeight: 800,
           textTransform: 'uppercase',
+          background: 'linear-gradient(90deg, #94a3b8, #e2e8f0)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
         }}
       >
         Shree
       </span>
       <span
         style={{
-          fontSize: '17px',
+          fontSize: '21px',
           fontWeight: 900,
-          letterSpacing: '0.03em',
-          background: 'linear-gradient(90deg, #e0f2fe 0%, #7dd3fc 35%, #38bdf8 65%, #0ea5e9 100%)',
+          letterSpacing: '0.02em',
+          background: 'linear-gradient(90deg, #f0f9ff 0%, #7dd3fc 30%, #38bdf8 60%, #0ea5e9 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          filter: 'drop-shadow(0 0 6px rgba(56,189,248,1)) drop-shadow(0 0 12px rgba(14,165,233,0.7))',
-          textShadow: 'none',
+          filter: 'drop-shadow(0 0 8px rgba(56,189,248,1)) drop-shadow(0 0 18px rgba(14,165,233,0.8))',
         }}
       >
         Calculator Hub
