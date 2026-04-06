@@ -150,11 +150,16 @@ const Logo = ({ className = "" }: { className?: string }) => (
       </span>
       <span
         style={{
-          fontSize: '27px',
+          fontSize: '24px',
           fontWeight: 900,
-          letterSpacing: '0.02em',
-          color: '#38bdf8',
-          textShadow: '0 0 12px rgba(56,189,248,1), 0 0 28px rgba(56,189,248,0.9), 0 0 50px rgba(14,165,233,0.7)',
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          background: 'linear-gradient(135deg, #ffffff 0%, #bae6fd 40%, #38bdf8 75%, #0284c7 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          filter: 'drop-shadow(0 0 10px #38bdf8) drop-shadow(0 0 22px #0ea5e9)',
+          display: 'block',
         }}
       >
         Calculator Hub
