@@ -120,9 +120,9 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <div
       className="transition-transform duration-300 hover:scale-105"
       style={{
-        width: '64px',
-        height: '64px',
-        borderRadius: '16px',
+        width: '78px',
+        height: '78px',
+        borderRadius: '18px',
         overflow: 'hidden',
         flexShrink: 0,
         boxShadow: '0 0 0 2px rgba(56,189,248,0.7), 0 0 16px rgba(0,150,255,1), 0 0 32px rgba(0,100,255,0.7)',
@@ -138,23 +138,23 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <div className="flex flex-col items-start" style={{ lineHeight: 1.2, gap: '1px' }}>
       <span
         style={{
-          fontSize: '14px',
-          letterSpacing: '0.25em',
+          fontSize: '16px',
+          letterSpacing: '0.28em',
           fontWeight: 800,
           textTransform: 'uppercase',
           color: '#e2e8f0',
-          textShadow: '0 0 8px rgba(148,163,184,0.9), 0 0 20px rgba(148,163,184,0.5)',
+          textShadow: '0 0 10px rgba(148,163,184,1), 0 0 22px rgba(148,163,184,0.6)',
         }}
       >
         Shree
       </span>
       <span
         style={{
-          fontSize: '22px',
+          fontSize: '27px',
           fontWeight: 900,
           letterSpacing: '0.02em',
           color: '#38bdf8',
-          textShadow: '0 0 10px rgba(56,189,248,1), 0 0 25px rgba(56,189,248,0.8), 0 0 45px rgba(14,165,233,0.6)',
+          textShadow: '0 0 12px rgba(56,189,248,1), 0 0 28px rgba(56,189,248,0.9), 0 0 50px rgba(14,165,233,0.7)',
         }}
       >
         Calculator Hub
