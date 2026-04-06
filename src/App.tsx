@@ -371,6 +371,8 @@ export default function App() {
   const [cryptoAmt, setCryptoAmt] = useState('1');
   const [cryptoType, setCryptoType] = useState('bitcoin');
   const [cryptoRes, setCryptoRes] = useState<string | null>(null);
+  const [cryptoPrices, setCryptoPrices] = useState<any>(null);
+  const [lastCryptoUpdate, setLastCryptoUpdate] = useState<number>(0);
   const [isFetchingCrypto, setIsFetchingCrypto] = useState(false);
 
   const loadRate = async () => {
@@ -435,20 +437,81 @@ export default function App() {
     }
   }, [multiAmt, fromCurr, toCurr, allRates]);
 
-  const convertCrypto = async () => {
+  const loadCryptoPrices = async () => {
+    // 1. Try Cache first (Instant)
+    const cache = localStorage.getItem("crypto_prices");
+    const time = localStorage.getItem("crypto_time");
+
+    const fallbackPrices = {
+      bitcoin: { inr: 5000000 },
+      ethereum: { inr: 300000 },
+      dogecoin: { inr: 10 }
+    };
+
+    if (cache && time) {
+      const prices = JSON.parse(cache);
+      setCryptoPrices(prices);
+      setLastCryptoUpdate(parseInt(time));
+      
+      // If cache is fresh (5 min), don't fetch
+      if (Date.now() - parseInt(time) < 300000) {
+        return prices;
+      }
+    } else {
+      // No cache? Use fallbacks for instant show
+      setCryptoPrices(fallbackPrices);
+    }
+
+    // 2. Background Update (Non-blocking)
     setIsFetchingCrypto(true);
     try {
-      const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cryptoType}&vs_currencies=inr`);
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin&vs_currencies=inr");
       const data = await res.json();
-      const price = data[cryptoType].inr;
-      const result = (parseFloat(cryptoAmt) * price).toFixed(2);
-      setCryptoRes(result);
-    } catch (err) {
-      console.error("Error fetching crypto price", err);
+      setCryptoPrices(data);
+      setLastCryptoUpdate(Date.now());
+      localStorage.setItem("crypto_prices", JSON.stringify(data));
+      localStorage.setItem("crypto_time", Date.now().toString());
+      return data;
+    } catch (e) {
+      console.error("Error fetching crypto prices", e);
+      // If fetch fails and we have no cache, keep fallbacks
+      if (!cryptoPrices) setCryptoPrices(fallbackPrices);
+    } finally {
+      setIsFetchingCrypto(false);
+    }
+    return null;
+  };
+
+  const refreshCryptoPrices = async () => {
+    // Force a fresh fetch
+    setIsFetchingCrypto(true);
+    try {
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,dogecoin&vs_currencies=inr");
+      const data = await res.json();
+      setCryptoPrices(data);
+      setLastCryptoUpdate(Date.now());
+      localStorage.setItem("crypto_prices", JSON.stringify(data));
+      localStorage.setItem("crypto_time", Date.now().toString());
+    } catch (e) {
+      console.error("Error refreshing crypto prices", e);
     } finally {
       setIsFetchingCrypto(false);
     }
   };
+
+  // Auto-calculate crypto when inputs change
+  useEffect(() => {
+    if (cryptoPrices && cryptoPrices[cryptoType]) {
+      const rate = cryptoPrices[cryptoType].inr;
+      const total = (parseFloat(cryptoAmt) || 0) * rate;
+      setCryptoRes(total.toFixed(2));
+    }
+  }, [cryptoAmt, cryptoType, cryptoPrices]);
+
+  // Initial load of crypto prices
+  useEffect(() => {
+    loadCryptoPrices();
+  }, []);
 
   // Auto-calculate currency when rate or value changes
   useEffect(() => {
@@ -1182,17 +1245,17 @@ export default function App() {
             )}
 
             {activeTab === 'crypto' && (
-              <Card className="flex flex-col">
+              <Card className="flex flex-col mobile-section">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="bg-amber-500/10 p-3 rounded-2xl">
                     <Coins className="text-amber-500" size={28} />
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-white">Crypto Converter</h3>
-                    <p className="text-slate-400 text-sm">Live cryptocurrency prices in INR.</p>
+                    <p className="text-slate-400 text-sm">Live cryptocurrency prices in INR (Ultra Fast).</p>
                   </div>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-6 flex-1">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-slate-400">Amount</label>
                     <input
@@ -1215,30 +1278,37 @@ export default function App() {
                       <option value="dogecoin">Dogecoin (DOGE)</option>
                     </select>
                   </div>
-                  <Button 
-                    onClick={convertCrypto}
-                    disabled={isFetchingCrypto}
-                    className="bg-amber-500 hover:bg-amber-400 text-slate-950"
-                  >
-                    {isFetchingCrypto ? 'Fetching Price...' : 'Convert Live'} <ArrowRight size={18} />
-                  </Button>
-
-                  {cryptoRes !== null && (
-                    <div className="mt-4 p-6 bg-amber-500/5 rounded-3xl border border-amber-500/20 space-y-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400 font-medium">Result</span>
-                        <span className="text-2xl font-black text-white">
-                          {cryptoAmt} {cryptoType.toUpperCase()} = ₹{cryptoRes}
-                        </span>
+                  
+                  {cryptoRes !== null && cryptoPrices && cryptoPrices[cryptoType] && (
+                    <div className="mt-4 p-6 bg-amber-500/5 rounded-3xl border border-amber-500/20 space-y-4 sticky-result">
+                      <div className="text-center">
+                        <span className="text-slate-400 font-medium block mb-2">Converted Value</span>
+                        <div className="flex items-baseline justify-center gap-2">
+                          <span className="text-lg font-bold text-amber-500/50">₹</span>
+                          <span className="text-4xl font-black text-white">
+                            {parseFloat(cryptoRes).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-4">
+                          1 {cryptoType.toUpperCase()} = ₹{cryptoPrices[cryptoType].inr.toLocaleString()}
+                        </p>
                       </div>
                       <button 
                         onClick={() => shareResult('crypto', { cryptoAmt, cryptoType })}
-                        className="w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-white font-black text-xs rounded-xl shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                        className="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black text-sm rounded-2xl shadow-[0_10px_20px_-5px_rgba(245,158,11,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                       >
-                        <ArrowLeftRight size={14} /> Share Result
+                        <ArrowLeftRight size={18} /> Share Result
                       </button>
                     </div>
                   )}
+                  
+                  <Button 
+                    onClick={refreshCryptoPrices}
+                    disabled={isFetchingCrypto}
+                    className="w-full py-6 bg-slate-800 hover:bg-slate-700 text-amber-500 font-bold rounded-2xl border border-slate-700"
+                  >
+                    {isFetchingCrypto ? 'Updating...' : 'Refresh Prices'} <ArrowRight size={18} />
+                  </Button>
                 </div>
               </Card>
             )}
