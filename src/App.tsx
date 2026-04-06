@@ -120,18 +120,18 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <div
       className="transition-transform duration-300 hover:scale-105"
       style={{
-        width: '54px',
-        height: '54px',
-        borderRadius: '14px',
+        width: '72px',
+        height: '72px',
+        borderRadius: '18px',
         overflow: 'hidden',
         flexShrink: 0,
-        boxShadow: '0 0 0 1.5px rgba(56,189,248,0.4), 0 0 14px rgba(0,150,255,0.9), 0 0 30px rgba(0,100,255,0.6), 0 0 50px rgba(0,60,255,0.35)',
+        boxShadow: '0 0 0 2px rgba(56,189,248,0.5), 0 0 18px rgba(0,150,255,1), 0 0 36px rgba(0,100,255,0.7), 0 0 60px rgba(0,60,255,0.4)',
       }}
     >
       <img
         src="/logo.png?v=4"
         alt="Shree Calculator Hub"
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
         draggable={false}
       />
     </div>
