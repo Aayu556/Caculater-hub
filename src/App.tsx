@@ -129,7 +129,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
       }}
     >
       <img
-        src="/logo.png?v=4"
+        src="/logo.jpg?v=5"
         alt="Shree Calculator Hub"
         style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
         draggable={false}
