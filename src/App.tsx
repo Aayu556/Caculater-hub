@@ -116,14 +116,30 @@ const tabs: { id: TabType; label: string; icon: any; category: string; descripti
 ];
 
 const Logo = ({ className = "" }: { className?: string }) => (
-  <div className={`flex items-center ${className}`}>
+  <div className={`flex items-center gap-3 ${className}`}>
     <img
       src="/logo.png"
       alt="Shree Calculator Hub"
-      className="h-10 sm:h-14 w-auto object-contain"
-      style={{ mixBlendMode: 'screen', filter: 'brightness(1.08) contrast(1.05)' }}
+      className="h-10 sm:h-12 w-auto object-contain rounded-xl transition-transform duration-300 hover:scale-105"
+      style={{
+        boxShadow: '0 0 10px rgba(0,200,255,0.6), 0 0 20px rgba(0,200,255,0.4), 0 0 30px rgba(0,200,255,0.2)',
+      }}
       draggable={false}
     />
+    <div className="flex flex-col items-start leading-tight">
+      <span className="text-xs text-slate-400 italic">Shree</span>
+      <span
+        className="text-base sm:text-lg font-bold"
+        style={{
+          background: 'linear-gradient(45deg,#38bdf8,#0ea5e9)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          textShadow: '0 0 10px rgba(56,189,248,0.8)',
+        }}
+      >
+        Calculator Hub
+      </span>
+    </div>
   </div>
 );
 
