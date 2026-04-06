@@ -117,24 +117,48 @@ const tabs: { id: TabType; label: string; icon: any; category: string; descripti
 
 const Logo = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center gap-3 ${className}`}>
-    <img
-      src="/logo.png"
-      alt="Shree Calculator Hub"
-      className="h-10 sm:h-12 w-auto object-contain rounded-xl transition-transform duration-300 hover:scale-105"
+    <div
+      className="transition-transform duration-300 hover:scale-105"
       style={{
-        boxShadow: '0 0 10px rgba(0,200,255,0.6), 0 0 20px rgba(0,200,255,0.4), 0 0 30px rgba(0,200,255,0.2)',
+        width: '54px',
+        height: '54px',
+        borderRadius: '14px',
+        overflow: 'hidden',
+        flexShrink: 0,
+        boxShadow: '0 0 0 1.5px rgba(56,189,248,0.4), 0 0 14px rgba(0,150,255,0.9), 0 0 30px rgba(0,100,255,0.6), 0 0 50px rgba(0,60,255,0.35)',
       }}
-      draggable={false}
-    />
-    <div className="flex flex-col items-start leading-tight">
-      <span className="text-xs text-slate-400 italic">Shree</span>
+    >
+      <img
+        src="/logo.png?v=4"
+        alt="Shree Calculator Hub"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        draggable={false}
+      />
+    </div>
+    <div className="flex flex-col items-start" style={{ lineHeight: 1.15 }}>
       <span
-        className="text-base sm:text-lg font-bold"
         style={{
-          background: 'linear-gradient(45deg,#38bdf8,#0ea5e9)',
+          fontSize: '11px',
+          fontStyle: 'italic',
+          letterSpacing: '0.12em',
+          fontWeight: 600,
+          background: 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          textShadow: '0 0 10px rgba(56,189,248,0.8)',
+        }}
+      >
+        SHREE
+      </span>
+      <span
+        style={{
+          fontSize: '20px',
+          fontWeight: 900,
+          letterSpacing: '0.04em',
+          background: 'linear-gradient(90deg, #ffffff 0%, #7dd3fc 40%, #38bdf8 70%, #0ea5e9 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          filter: 'drop-shadow(0 0 8px rgba(56,189,248,0.9)) drop-shadow(0 0 16px rgba(14,165,233,0.6))',
+          textTransform: 'uppercase',
         }}
       >
         Calculator Hub
