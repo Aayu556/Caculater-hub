@@ -120,9 +120,9 @@ const Logo = ({ className = "" }: { className?: string }) => (
     <div
       className="transition-transform duration-300 hover:scale-105"
       style={{
-        width: '92px',
-        height: '92px',
-        borderRadius: '22px',
+        width: '68px',
+        height: '68px',
+        borderRadius: '16px',
         overflow: 'hidden',
         flexShrink: 0,
         boxShadow: '0 0 0 2px rgba(56,189,248,0.7), 0 0 16px rgba(0,150,255,1), 0 0 32px rgba(0,100,255,0.7)',
