@@ -135,29 +135,26 @@ const Logo = ({ className = "" }: { className?: string }) => (
         draggable={false}
       />
     </div>
-    <div className="flex flex-col items-start" style={{ lineHeight: 1.15, gap: '2px' }}>
+    <div className="flex flex-col items-start" style={{ lineHeight: 1.2, gap: '1px' }}>
       <span
         style={{
-          fontSize: '13px',
-          letterSpacing: '0.22em',
+          fontSize: '14px',
+          letterSpacing: '0.25em',
           fontWeight: 800,
           textTransform: 'uppercase',
-          background: 'linear-gradient(90deg, #94a3b8, #e2e8f0)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          color: '#e2e8f0',
+          textShadow: '0 0 8px rgba(148,163,184,0.9), 0 0 20px rgba(148,163,184,0.5)',
         }}
       >
         Shree
       </span>
       <span
         style={{
-          fontSize: '21px',
+          fontSize: '22px',
           fontWeight: 900,
           letterSpacing: '0.02em',
-          background: 'linear-gradient(90deg, #f0f9ff 0%, #7dd3fc 30%, #38bdf8 60%, #0ea5e9 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          filter: 'drop-shadow(0 0 8px rgba(56,189,248,1)) drop-shadow(0 0 18px rgba(14,165,233,0.8))',
+          color: '#38bdf8',
+          textShadow: '0 0 10px rgba(56,189,248,1), 0 0 25px rgba(56,189,248,0.8), 0 0 45px rgba(14,165,233,0.6)',
         }}
       >
         Calculator Hub
