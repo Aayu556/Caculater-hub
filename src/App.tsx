@@ -131,7 +131,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
       <img
         src="/logo.jpg?v=5"
         alt="Shree Calculator Hub"
-        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+        style={{ width: '100%', height: '100%', objectFit: 'fill', display: 'block' }}
         draggable={false}
       />
     </div>
