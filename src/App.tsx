@@ -116,41 +116,14 @@ const tabs: { id: TabType; label: string; icon: any; category: string; descripti
 ];
 
 const Logo = ({ className = "" }: { className?: string }) => (
-  <div className={`flex items-center gap-3 ${className}`}>
-    <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg" className="h-8 sm:h-12 w-auto logo-shine">
-      <defs>
-        <linearGradient id="metalBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#4facfe', stopOpacity: 1 }} />
-          <stop offset="100%" style={{ stopColor: '#003399', stopOpacity: 1 }} />
-        </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-          <feMerge>
-            <feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      <rect x="10" y="20" width="100" height="110" rx="20" fill="url(#metalBlue)" filter="url(#glow)" />
-      
-      <g fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.2)" strokeWidth="1">
-        <rect x="25" y="35" width="30" height="30" rx="5" />
-        <rect x="65" y="35" width="30" height="30" rx="5" />
-        <rect x="25" y="85" width="30" height="30" rx="5" />
-        <rect x="65" y="85" width="30" height="30" rx="5" />
-      </g>
-
-      <g fill="white" fontFamily="Arial, sans-serif" fontWeight="bold" textAnchor="middle">
-        <text x="40" y="57" fontSize="22">+</text>
-        <text x="80" y="55" fontSize="22">-</text>
-        <text x="40" y="107" fontSize="20">9</text>
-        <text x="80" y="107" fontSize="20">=</text>
-      </g>
-
-      <text x="130" y="45" fill="#cccccc" fontFamily="Verdana, sans-serif" fontSize="18" fontStyle="italic">Shree</text>
-      <text x="130" y="90" fill="white" fontFamily="Segoe UI, Arial, sans-serif" fontSize="42" fontWeight="bold">Calculator</text>
-      <text x="130" y="130" fill="#38b6ff" fontFamily="Segoe UI, Arial, sans-serif" fontSize="42" fontWeight="bold">Hub</text>
-    </svg>
+  <div className={`flex items-center ${className}`}>
+    <img
+      src="/logo.png"
+      alt="Shree Calculator Hub"
+      className="h-10 sm:h-14 w-auto object-contain"
+      style={{ mixBlendMode: 'screen', filter: 'brightness(1.08) contrast(1.05)' }}
+      draggable={false}
+    />
   </div>
 );
 
