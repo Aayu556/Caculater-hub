@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shree Calculator Hub</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b1220;
+  color: white;
+}
+
+/* ===== HEADER ===== */
+.header {
+  padding: 8px 10px;
+  background: linear-gradient(135deg,#020617,#0f172a);
+}
+
+/* LOGO ALIGN FIX */
+.logo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* LOGO SIZE FIX */
+.logo-box img {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,200,255,0.6);
+}
+
+/* TEXT FIX */
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logo-text .small {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.logo-text .big {
+  font-size: 16px;
+  font-weight: bold;
+  color: #38bdf8;
+}
+
+/* ===== MAIN ===== */
+.container {
+  padding: 10px;
+}
+
+/* CARD */
+.card {
+  background: #111827;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,200,255,0.15);
+}
+
+/* INPUT GROUP COMPACT */
+.input-group {
+  margin: 6px 0;
+}
+
+label {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* VALUE BOX */
+.value-box {
+  float: right;
+  font-size: 13px;
+  color: #00ffc8;
+}
+
+/* SLIDER */
+input[type="range"] {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ===== EMI RESULT CLEAN ===== */
+.result-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#0f172a,#020617);
+  border: 1px solid rgba(0,200,255,0.3);
+}
+
+/* EMI BIG */
+.emi-main {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.emi-main h3 {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.emi-main h1 {
+  margin: 3px 0;
+  font-size: 24px;
+  color: #00ffc8;
+}
+
+/* SMALL RESULT GRID */
+.result-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.result-item {
+  flex: 1;
+  background: #1f2937;
+  padding: 6px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.result-item span {
+  display: block;
+  font-size: 13px;
+  color: #00ffc8;
+}
+
+/* BUTTON FIX */
+button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(45deg,#00c6ff,#0072ff);
+  color: white;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-box">
+    <img src="logo.png">
+    <div class="logo-text">
+      <span class="small">Shree</span>
+      <span class="big">Calculator Hub</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+  <div class="card">
+
+    <!-- LOAN -->
+    <div class="input-group">
+      <label>Loan Amount</label>
+      <span class="value-box">₹ <span id="loanVal">1000000</span></span>
+      <input type="range" id="loan" min="10000" max="10000000" value="1000000">
+    </div>
+
+    <!-- RATE -->
+    <div class="input-group">
+      <label>Interest Rate</label>
+      <span class="value-box"><span id="rateVal">6.5</span>%</span>
+      <input type="range" id="rate" min="1" max="20" step="0.1" value="6.5">
+    </div>
+
+    <!-- TIME -->
+    <div class="input-group">
+      <label>Loan Tenure</label>
+      <span class="value-box"><span id="timeVal">5</span> Yr</span>
+      <input type="range" id="time" min="1" max="30" value="5">
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-box">
+      <div class="emi-main">
+        <h3>Monthly EMI</h3>
+        <h1>₹ <span id="emi">0</span></h1>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-item">
+          Principal
+          <span id="principal">0</span>
+        </div>
+        <div class="result-item">
+          Interest
+          <span id="interest">0</span>
+        </div>
+        <div class="result-item">
+          Total
+          <span id="total">0</span>
+        </div>
+      </div>
+    </div>
+
+    <button>Check Loan Limit</button>
+
+  </div>
+</div>
+
+<script>
+loan.oninput = () => { loanVal.innerText = loan.value; calc(); }
+rate.oninput = () => { rateVal.innerText = rate.value; calc(); }
+time.oninput = () => { timeVal.innerText = time.value; calc(); }
+
+function calc() {
+  let P = loan.value;
+  let r = rate.value / 100 / 12;
+  let n = time.value * 12;
+
+  let emi = (P*r*Math.pow(1+r,n)) / (Math.pow(1+r,n)-1);
+  let total = emi * n;
+  let interest = total - P;
+
+  document.getElementById("emi").innerText = Math.round(emi);
+  document.getElementById("principal").innerText = Math.round(P);
+  document.getElementById("interest").innerText = Math.round(interest);
+  document.getElementById("total").innerText = Math.round(total);
+}
+
+calc();
+</script>
+
+</body>
+</html>
