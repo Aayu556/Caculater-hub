@@ -14,7 +14,6 @@ import {
   Coins, PiggyBank, FileText, Briefcase, Building, Car
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 // --- Types ---
 interface ConstructionResult {
@@ -413,9 +412,9 @@ export default function App() {
   };
 
   const convertCurrency = async () => {
-    const rate = await loadRate();
-    if (rate) {
-      setCurrencyRes(parseFloat(usdVal) * rate);
+    const rates = await loadRate();
+    if (rates && rates.INR) {
+      setCurrencyRes(parseFloat(usdVal) * rates.INR);
     }
   };
 
@@ -959,14 +958,15 @@ export default function App() {
   useEffect(() => {
     const amt = parseFloat(ssyAmt), age = parseFloat(ssyAge);
     if (isNaN(amt) || isNaN(age)) return;
-    const years = 21 - age;
+    const years = 21 - age; // scheme matures when girl turns 21
     const rate = 0.082;
+    const contributionYears = Math.min(15, years); // max 15 years OR until maturity
     let balance = 0;
-    for (let i = 0; i < 15; i++) { // Max 15 years contribution
+    for (let i = 0; i < contributionYears; i++) {
       balance = (balance + amt) * (1 + rate);
     }
-    // Compounding for remaining years
-    for (let i = 0; i < (years - 15); i++) {
+    // Compounding for remaining years after contribution stops
+    for (let i = 0; i < (years - contributionYears); i++) {
       balance = balance * (1 + rate);
     }
     setSsyRes(balance);
@@ -1431,6 +1431,27 @@ export default function App() {
                               <span className="text-xs sm:text-lg font-black text-cyan-400">₹{Math.round(emiResult.totalPayment).toLocaleString()}</span>
                             </div>
                           </div>
+
+                          {emiResult && (() => {
+                            const total = emiResult.principal + emiResult.totalInterest;
+                            const principalPct = Math.round((emiResult.principal / total) * 100);
+                            const interestPct = 100 - principalPct;
+                            return (
+                              <div className="w-full space-y-2">
+                                <div className="flex justify-between text-[10px] text-slate-500 font-bold uppercase">
+                                  <span>Principal vs Interest</span>
+                                </div>
+                                <div className="flex h-3 rounded-full overflow-hidden">
+                                  <div className="bg-sky-400 transition-all duration-500" style={{ width: `${principalPct}%` }} />
+                                  <div className="bg-emerald-500 flex-1" />
+                                </div>
+                                <div className="flex justify-between text-[10px] text-slate-400">
+                                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-sky-400 inline-block"></span>Principal {principalPct}%</span>
+                                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>Interest {interestPct}%</span>
+                                </div>
+                              </div>
+                            );
+                          })()}
 
                           <div className="flex flex-row items-center justify-between sm:justify-start gap-4">
                             <button 
