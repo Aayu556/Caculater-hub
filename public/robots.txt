@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://caculater-hub.vercel.app/sitemap.xml
