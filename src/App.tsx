@@ -73,7 +73,7 @@ type TabType = 'emi' | 'construction' | 'gst' | 'bmi' | 'age' | 'discount' | 'pe
   'bmr' | 'calorie' | 'weight' |
   'homeLoan' | 'carLoan' | 'sbiLoan' | 'hdfcLoan' | 'axisLoan' | 'iciciLoan' |
   'lumpsum' | 'swp' | 'mfReturns' | 'ssy' | 'rd' | 'ppf' | 'epf' | 'incomeTax' | 'xirr' |
-  'currency' | 'basic' | 'multiCurrency' | 'crypto';
+  'currency' | 'basic' | 'multiCurrency' | 'crypto' | 'salary';
 
 const tabs: { id: TabType; label: string; icon: any; category: string; description: string }[] = [
   { id: 'emi', label: 'EMI Calculator', icon: CreditCard, category: 'Finance', description: 'Calculate your EMI instantly with our free EMI Calculator. Enter your loan amount, interest rate & tenure.' },
@@ -113,6 +113,7 @@ const tabs: { id: TabType; label: string; icon: any; category: string; descripti
   { id: 'multiCurrency', label: 'Multi-Currency', icon: ArrowLeftRight, category: 'General', description: 'Live exchange rates for multiple global currencies.' },
   { id: 'crypto', label: 'Crypto Converter', icon: Coins, category: 'General', description: 'Live cryptocurrency prices in INR (Bitcoin, Ethereum, Dogecoin).' },
   { id: 'basic', label: 'Basic Calculator', icon: Calculator, category: 'General', description: 'Simple addition, subtraction, multiplication, and division.' },
+  { id: 'salary', label: 'Salary Calculator', icon: Wallet, category: 'Finance', description: 'Smart salary budget planner using 50-20-20-10 rule. Split your salary into Essentials, Savings, Investments and Luxury.' },
 ];
 
 const Logo = ({ className = "" }: { className?: string }) => (
@@ -537,6 +538,13 @@ export default function App() {
   const [bNum1, setBNum1] = useState('');
   const [bNum2, setBNum2] = useState('');
   const [basicRes, setBasicRes] = useState<number | string | null>(null);
+
+  // Salary Calculator State
+  const [salaryAmount, setSalaryAmount] = useState('50000');
+  const [salaryPct1, setSalaryPct1] = useState('50');
+  const [salaryPct2, setSalaryPct2] = useState('20');
+  const [salaryPct3, setSalaryPct3] = useState('20');
+  const [salaryPct4, setSalaryPct4] = useState('10');
 
   const calculateBasic = (op: 'add' | 'sub' | 'mul' | 'div') => {
     const n1 = parseFloat(bNum1);
@@ -1015,12 +1023,12 @@ export default function App() {
           </div>
 
           <nav className="hidden md:flex items-center gap-2">
-            <a
-              href="/salary-calculator"
+            <button
+              onClick={() => { setActiveTab('salary'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
               className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
             >
-              <span>★</span> Smart Salary Calculator
-            </a>
+              <span>★</span> Salary Calculator
+            </button>
             <button 
               onClick={() => copyToClipboard(window.location.href)}
               className="p-2 text-slate-400 hover:text-sky-400 hover:bg-slate-800/50 rounded-xl transition-all"
@@ -1333,8 +1341,197 @@ export default function App() {
               </Card>
             )}
 
+            {activeTab === 'salary' && (() => {
+              const sal = parseFloat(salaryAmount) || 0;
+              const p1 = Math.max(0, Math.min(100, parseFloat(salaryPct1) || 0));
+              const p2 = Math.max(0, Math.min(100, parseFloat(salaryPct2) || 0));
+              const p3 = Math.max(0, Math.min(100, parseFloat(salaryPct3) || 0));
+              const p4 = Math.max(0, Math.min(100, parseFloat(salaryPct4) || 0));
+              const totalPct = p1 + p2 + p3 + p4;
+              const a1 = sal * p1 / 100;
+              const a2 = sal * p2 / 100;
+              const a3 = sal * p3 / 100;
+              const a4 = sal * p4 / 100;
+              const fmt = (n: number) => '₹' + Math.round(n).toLocaleString('en-IN');
+              const cats = [
+                { label: 'Essentials', pct: p1, amt: a1, color: '#0ea5e9', bg: 'bg-sky-500/10', border: 'border-sky-500/25', text: 'text-sky-400', sub: 'Rent, food, bills', set: setSalaryPct1 },
+                { label: 'Savings', pct: p2, amt: a2, color: '#10b981', bg: 'bg-emerald-500/10', border: 'border-emerald-500/25', text: 'text-emerald-400', sub: 'Emergency fund', set: setSalaryPct2 },
+                { label: 'Investments', pct: p3, amt: a3, color: '#8b5cf6', bg: 'bg-violet-500/10', border: 'border-violet-500/25', text: 'text-violet-400', sub: 'SIP, stocks, MF', set: setSalaryPct3 },
+                { label: 'Luxury', pct: p4, amt: a4, color: '#f59e0b', bg: 'bg-amber-500/10', border: 'border-amber-500/25', text: 'text-amber-400', sub: 'Travel, dining', set: setSalaryPct4 },
+              ];
+              // SVG Pie Chart
+              const pieData = cats.map(c => c.pct);
+              const pieTotal = pieData.reduce((a, b) => a + b, 0) || 1;
+              let cumulative = 0;
+              const cx = 80, cy = 80, r = 65, innerR = 40;
+              const slices = cats.map((cat, i) => {
+                const slice = (pieData[i] / pieTotal) * 360;
+                const startAngle = cumulative;
+                cumulative += slice;
+                const toRad = (deg: number) => (deg - 90) * Math.PI / 180;
+                const x1 = cx + r * Math.cos(toRad(startAngle));
+                const y1 = cy + r * Math.sin(toRad(startAngle));
+                const x2 = cx + r * Math.cos(toRad(startAngle + slice));
+                const y2 = cy + r * Math.sin(toRad(startAngle + slice));
+                const xi1 = cx + innerR * Math.cos(toRad(startAngle));
+                const yi1 = cy + innerR * Math.sin(toRad(startAngle));
+                const xi2 = cx + innerR * Math.cos(toRad(startAngle + slice));
+                const yi2 = cy + innerR * Math.sin(toRad(startAngle + slice));
+                const large = slice > 180 ? 1 : 0;
+                const d = `M ${xi1} ${yi1} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} L ${xi2} ${yi2} A ${innerR} ${innerR} 0 ${large} 0 ${xi1} ${yi1} Z`;
+                return { d, color: cat.color };
+              });
+              return (
+                <Card className="flex flex-col border-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.08)] mobile-section">
+                  {/* Header */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-amber-500/10 p-3 rounded-2xl">
+                      <Wallet className="text-amber-500" size={28} />
+                    </div>
+                    <div>
+                      <h1 className="text-2xl font-bold text-white">Smart Salary Calculator</h1>
+                      <p className="text-slate-400 text-sm">50-20-20-10 budget rule — split your salary instantly</p>
+                    </div>
+                  </div>
+
+                  {/* Salary Slider */}
+                  <div className="mb-6 p-5 bg-slate-900/60 rounded-2xl border border-slate-800">
+                    <div className="flex justify-between items-center mb-3">
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <IndianRupee size={14} className="text-amber-400" /> Monthly Salary
+                      </label>
+                      <div className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-xl">
+                        <span className="text-amber-400 font-black text-lg">₹</span>
+                        <input
+                          type="number"
+                          value={salaryAmount}
+                          onChange={e => setSalaryAmount(e.target.value)}
+                          className="bg-transparent border-none outline-none text-white font-black text-lg w-28 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                      </div>
+                    </div>
+                    <input type="range" min="5000" max="500000" step="1000" value={salaryAmount}
+                      onChange={e => setSalaryAmount(e.target.value)}
+                      className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+                    <div className="flex justify-between text-[10px] text-slate-600 mt-1">
+                      <span>₹5,000</span><span>₹5,00,000</span>
+                    </div>
+                  </div>
+
+                  {/* Category Sliders */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                    {cats.map((cat) => (
+                      <div key={cat.label} className={`${cat.bg} border ${cat.border} rounded-2xl p-4`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: cat.color }} />
+                            <span className={`text-xs font-bold uppercase tracking-wider ${cat.text}`}>{cat.label}</span>
+                          </div>
+                          <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-700 px-2 py-1 rounded-lg">
+                            <input
+                              type="number" min="0" max="100"
+                              value={cat.pct}
+                              onChange={e => cat.set(e.target.value)}
+                              className="bg-transparent border-none outline-none text-white font-black text-sm w-8 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            />
+                            <span className="text-slate-500 text-xs">%</span>
+                          </div>
+                        </div>
+                        <input type="range" min="0" max="100" step="1" value={cat.pct}
+                          onChange={e => cat.set(e.target.value)}
+                          className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer mb-3"
+                          style={{ accentColor: cat.color }} />
+                        <div className={`text-2xl font-black ${cat.text}`}>{fmt(cat.amt)}</div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">{cat.sub}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Total % warning */}
+                  {totalPct !== 100 && (
+                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-bold flex items-center gap-2">
+                      <span>⚠️</span> Percentages add up to {totalPct}% — adjust to equal 100%
+                    </div>
+                  )}
+
+                  {/* Breakdown Bar */}
+                  <div className="mb-5">
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Breakdown</div>
+                    <div className="flex h-3 rounded-full overflow-hidden bg-slate-800">
+                      {cats.map(cat => (
+                        <div key={cat.label} className="h-full transition-all duration-500" style={{ width: `${cat.pct}%`, background: cat.color }} />
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                      {cats.map(cat => (
+                        <span key={cat.label} className="text-[10px] text-slate-400 flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full inline-block" style={{ background: cat.color }} />
+                          {cat.label} {cat.pct}%
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Pie Chart + Legend */}
+                  <div className="flex flex-col sm:flex-row gap-6 items-center mb-6 p-5 bg-slate-900/40 rounded-2xl border border-slate-800">
+                    <svg width="160" height="160" viewBox="0 0 160 160" className="flex-shrink-0">
+                      {slices.map((s, i) => (
+                        <path key={i} d={s.d} fill={s.color} stroke="#020617" strokeWidth="3" />
+                      ))}
+                      <circle cx={cx} cy={cy} r={innerR - 2} fill="#0f172a" />
+                      <text x={cx} y={cy - 6} textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="bold">SALARY</text>
+                      <text x={cx} y={cy + 8} textAnchor="middle" fill="#fff" fontSize="11" fontWeight="900">
+                        {fmt(sal)}
+                      </text>
+                    </svg>
+                    <div className="flex flex-col gap-3 flex-1 w-full">
+                      {cats.map(cat => (
+                        <div key={cat.label} className="flex items-center gap-3">
+                          <span className="w-3 h-3 rounded-sm flex-shrink-0" style={{ background: cat.color }} />
+                          <span className="text-slate-400 text-sm flex-1">{cat.label}</span>
+                          <span className="text-white font-bold text-sm">{fmt(cat.amt)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Financial Advice */}
+                  {p2 < 20 ? (
+                    <div className="p-4 bg-red-500/8 border border-red-500/25 rounded-2xl flex items-start gap-3">
+                      <span className="text-2xl">⚠️</span>
+                      <div>
+                        <div className="text-red-400 font-bold text-sm mb-1">Warning: Increase your savings!</div>
+                        <div className="text-slate-400 text-xs leading-relaxed">Your savings are below 20%. Try reducing luxury expenses and redirect funds to your emergency corpus.</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-4 bg-emerald-500/8 border border-emerald-500/25 rounded-2xl flex items-start gap-3">
+                      <span className="text-2xl">✅</span>
+                      <div>
+                        <div className="text-emerald-400 font-bold text-sm mb-1">Good financial planning!</div>
+                        <div className="text-slate-400 text-xs leading-relaxed">Your savings allocation is healthy. Keep it up to build a strong emergency fund and long-term wealth.</div>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              );
+            })()}
+
             {activeTab === 'basic' && (
               <Card className="flex flex-col mobile-section">
+                {/* Salary Calculator Button above Basic */}
+                <div className="mb-6 p-4 bg-gradient-to-r from-amber-500/10 to-yellow-500/5 border border-amber-500/25 rounded-2xl flex items-center justify-between gap-4">
+                  <div>
+                    <div className="text-amber-400 font-bold text-sm flex items-center gap-2"><Wallet size={16} /> Smart Salary Calculator</div>
+                    <div className="text-slate-500 text-xs mt-0.5">Split your salary using 50-20-20-10 rule</div>
+                  </div>
+                  <button
+                    onClick={() => { setActiveTab('salary'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    className="flex-shrink-0 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5"
+                  >
+                    Open <ArrowRight size={14} />
+                  </button>
+                </div>
                 <div className="flex items-center gap-4 mb-8">
                   <div className="bg-sky-500/10 p-3 rounded-2xl">
                     <Calculator className="text-sky-500" size={28} />
@@ -2524,7 +2721,7 @@ export default function App() {
             <div>
               <h4 className="text-white font-bold mb-6">Other Tools</h4>
               <ul className="space-y-4 text-sm text-slate-500">
-                <li><a href="/salary-calculator" className="hover:text-sky-400 transition-colors flex items-center gap-1.5"><span className="text-amber-400 text-xs">★</span> Smart Salary Calculator</a></li>
+                <li><button onClick={() => { setActiveTab('salary'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors flex items-center gap-1.5"><span className="text-amber-400 text-xs">★</span> Smart Salary Calculator</button></li>
                 <li><button onClick={() => { setActiveTab('construction'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors">Construction Estimator</button></li>
                 <li><button onClick={() => { setActiveTab('bmi'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors">BMI Calculator</button></li>
                 <li><button onClick={() => { setActiveTab('age'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors">Age Calculator</button></li>
