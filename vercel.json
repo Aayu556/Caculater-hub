@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/salary-calculator", "destination": "/salary-calculator.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

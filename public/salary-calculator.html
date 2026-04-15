@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Salary Calculator – Free Salary Budget Planner Online | Shree Calculator Hub</title>
+  <meta name="description" content="Use the Smart Salary Calculator to plan your monthly budget. Automatically split your salary into Essentials, Savings, Investments and Luxury with pie chart and financial advice.">
+  <meta name="keywords" content="salary calculator, budget planner, salary split, savings calculator, 50 20 20 10 rule, salary budget india">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://shree-calculators-hub.vercel.app/salary-calculator">
+  <meta property="og:title" content="Smart Salary Calculator – Shree Calculator Hub">
+  <meta property="og:description" content="Split your salary into Essentials, Savings, Investments and Luxury. Free budget planner with pie chart.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shree-calculators-hub.vercel.app/salary-calculator">
+  <link rel="icon" href="/logo.jpg">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Smart Salary Calculator",
+    "url": "https://shree-calculators-hub.vercel.app/salary-calculator",
+    "description": "Free smart salary budget calculator with pie chart and financial advice.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Shree Calculator Hub",
+      "url": "https://shree-calculators-hub.vercel.app/"
+    }
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0a0f1e 0%, #0d1b2a 50%, #0a0f1e 100%);
+      min-height: 100vh;
+      color: #e2e8f0;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid #1e293b;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-link { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-img {
+      width: 40px; height: 40px; border-radius: 10px; overflow: hidden;
+      box-shadow: 0 0 0 2px rgba(56,189,248,0.7), 0 0 14px rgba(0,150,255,0.8);
+    }
+    .logo-img img { width: 100%; height: 100%; object-fit: fill; }
+    .logo-text-top { font-size: 10px; letter-spacing: 0.2em; font-weight: 800; color: #e2e8f0; text-transform: uppercase; }
+    .logo-text-bot {
+      font-size: 15px; font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, #bae6fd 40%, #38bdf8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .back-btn {
+      font-size: 12px; color: #38bdf8; border: 1px solid rgba(56,189,248,0.3);
+      padding: 6px 14px; border-radius: 8px; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(56,189,248,0.1); }
+
+    /* PAGE TITLE */
+    .page-hero { text-align: center; padding: 40px 20px 28px; }
+    .page-hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 900; color: #fff; margin-bottom: 10px; }
+    .page-hero p { color: #94a3b8; font-size: 0.95rem; max-width: 520px; margin: 0 auto; }
+
+    /* MAIN LAYOUT */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 16px 60px; }
+
+    /* CARD */
+    .card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+    }
+
+    /* SALARY INPUT */
+    .input-section { margin-bottom: 32px; }
+    .input-label {
+      font-size: 13px; font-weight: 700; color: #94a3b8;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; display: block;
+    }
+    .salary-input-wrap {
+      display: flex; align-items: center;
+      background: rgba(30,41,59,0.8); border: 2px solid #334155;
+      border-radius: 14px; padding: 4px 16px;
+      transition: border-color 0.2s;
+    }
+    .salary-input-wrap:focus-within { border-color: #38bdf8; }
+    .rupee-sym { font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin-right: 8px; }
+    .salary-input-wrap input {
+      background: none; border: none; outline: none;
+      font-size: 2rem; font-weight: 900; color: #fff;
+      width: 100%; padding: 10px 0;
+    }
+    .salary-input-wrap input::placeholder { color: #475569; }
+
+    /* PERCENT INPUTS */
+    .percent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .percent-card {
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid;
+      transition: transform 0.15s;
+    }
+    .percent-card:hover { transform: translateY(-2px); }
+    .percent-card.essentials  { background: rgba(14,165,233,0.08); border-color: rgba(14,165,233,0.25); }
+    .percent-card.savings     { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); }
+    .percent-card.investments { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.25); }
+    .percent-card.luxury      { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); }
+
+    .cat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .cat-dot.c1 { background: #0ea5e9; } .cat-dot.c2 { background: #10b981; }
+    .cat-dot.c3 { background: #8b5cf6; } .cat-dot.c4 { background: #f59e0b; }
+    .cat-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; flex: 1; margin-left: 8px; }
+    .cat-name.c1 { color: #38bdf8; } .cat-name.c2 { color: #34d399; }
+    .cat-name.c3 { color: #a78bfa; } .cat-name.c4 { color: #fbbf24; }
+
+    .pct-input-wrap {
+      display: flex; align-items: center;
+      background: rgba(15,23,42,0.6); border: 1px solid #334155;
+      border-radius: 8px; padding: 2px 10px;
+      width: 70px;
+    }
+    .pct-input-wrap input {
+      background: none; border: none; outline: none;
+      font-size: 1rem; font-weight: 800; color: #fff;
+      width: 40px; text-align: right;
+      -moz-appearance: textfield;
+    }
+    .pct-input-wrap input::-webkit-outer-spin-button,
+    .pct-input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .pct-sym { color: #64748b; font-size: 0.85rem; margin-left: 2px; }
+
+    .amount-display {
+      font-size: 1.5rem; font-weight: 900; color: #fff; margin-top: 6px;
+    }
+    .amount-display.c1 { color: #38bdf8; } .amount-display.c2 { color: #34d399; }
+    .amount-display.c3 { color: #a78bfa; } .amount-display.c4 { color: #fbbf24; }
+
+    /* TOTAL WARNING */
+    .pct-warning {
+      font-size: 12px; font-weight: 700; padding: 8px 14px;
+      border-radius: 8px; margin-bottom: 20px; display: none;
+      background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #f87171;
+    }
+
+    /* PIE CHART */
+    .chart-section { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; margin-bottom: 28px; }
+    .pie-wrap { flex-shrink: 0; }
+    canvas#pieChart { display: block; }
+    .legend { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 12px; }
+    .legend-item { display: flex; align-items: center; gap: 10px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .legend-label { font-size: 13px; color: #94a3b8; flex: 1; }
+    .legend-val { font-size: 13px; font-weight: 800; color: #fff; }
+
+    /* FINANCIAL ADVICE */
+    .advice-box {
+      border-radius: 14px; padding: 18px 20px;
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 28px; border: 1px solid;
+    }
+    .advice-box.good { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.25); }
+    .advice-box.warn { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); }
+    .advice-icon { font-size: 1.6rem; line-height: 1; }
+    .advice-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+    .advice-box.good .advice-title { color: #34d399; }
+    .advice-box.warn .advice-title { color: #f87171; }
+    .advice-text { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+    /* BREAKDOWN BAR */
+    .bar-section h2 { font-size: 14px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+    .bar-track { height: 12px; border-radius: 99px; overflow: hidden; display: flex; background: #1e293b; margin-bottom: 20px; }
+    .bar-seg { height: 100%; transition: width 0.4s ease; }
+
+    /* SEO CONTENT */
+    .seo-content { margin-top: 36px; border-top: 1px solid #1e293b; padding-top: 28px; }
+    .seo-content h2 { font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .seo-content p { font-size: 13px; color: #64748b; line-height: 1.7; margin-bottom: 14px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .tag { padding: 5px 12px; background: #1e293b; border-radius: 99px; font-size: 11px; color: #64748b; border: 1px solid #334155; }
+
+    /* FOOTER */
+    footer { text-align: center; padding: 28px 20px; border-top: 1px solid #1e293b; margin-top: 10px; }
+    footer p { font-size: 12px; color: #475569; }
+    footer a { color: #38bdf8; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 540px) {
+      .chart-section { flex-direction: column; align-items: flex-start; }
+      .percent-grid { grid-template-columns: 1fr 1fr; }
+      .card { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo-link" href="/">
+    <div class="logo-img"><img src="/logo.jpg" alt="Shree Calculator Hub" /></div>
+    <div>
+      <div class="logo-text-top">Shree</div>
+      <div class="logo-text-bot">Calculator Hub</div>
+    </div>
+  </a>
+  <a class="back-btn" href="/">← All Calculators</a>
+</header>
+
+<div class="page-hero">
+  <h1>Smart Salary Calculator</h1>
+  <p>Plan your monthly budget using the 50-20-20-10 rule. Adjust percentages and see your breakdown instantly.</p>
+</div>
+
+<div class="container">
+  <div class="card">
+
+    <!-- Salary Input -->
+    <section class="input-section">
+      <label class="input-label" for="salaryInput">Your Monthly Salary</label>
+      <div class="salary-input-wrap">
+        <span class="rupee-sym">₹</span>
+        <input type="number" id="salaryInput" placeholder="50000" min="0" />
+      </div>
+    </section>
+
+    <!-- Percent Cards -->
+    <div class="percent-grid">
+      <div class="percent-card essentials">
+        <div class="cat-header">
+          <span class="cat-dot c1"></span>
+          <span class="cat-name c1">Essentials</span>
+          <div class="pct-input-wrap">
+            <input type="number" id="pct1" value="50" min="0" max="100" />
+            <span class="pct-sym">%</span>
+          </div>
+        </div>
+        <div class="amount-display c1" id="amt1">₹0</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px;">Rent, food, bills</div>
+      </div>
+
+      <div class="percent-card savings">
+        <div class="cat-header">
+          <span class="cat-dot c2"></span>
+          <span class="cat-name c2">Savings</span>
+          <div class="pct-input-wrap">
+            <input type="number" id="pct2" value="20" min="0" max="100" />
+            <span class="pct-sym">%</span>
+          </div>
+        </div>
+        <div class="amount-display c2" id="amt2">₹0</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px;">Emergency fund</div>
+      </div>
+
+      <div class="percent-card investments">
+        <div class="cat-header">
+          <span class="cat-dot c3"></span>
+          <span class="cat-name c3">Investments</span>
+          <div class="pct-input-wrap">
+            <input type="number" id="pct3" value="20" min="0" max="100" />
+            <span class="pct-sym">%</span>
+          </div>
+        </div>
+        <div class="amount-display c3" id="amt3">₹0</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px;">SIP, stocks, MF</div>
+      </div>
+
+      <div class="percent-card luxury">
+        <div class="cat-header">
+          <span class="cat-dot c4"></span>
+          <span class="cat-name c4">Luxury</span>
+          <div class="pct-input-wrap">
+            <input type="number" id="pct4" value="10" min="0" max="100" />
+            <span class="pct-sym">%</span>
+          </div>
+        </div>
+        <div class="amount-display c4" id="amt4">₹0</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px;">Entertainment, travel</div>
+      </div>
+    </div>
+
+    <!-- Warning -->
+    <div class="pct-warning" id="pctWarning">⚠️ Percentages add up to <span id="totalPct">100</span>% — adjust to equal 100%</div>
+
+    <!-- Breakdown Bar -->
+    <div class="bar-section">
+      <h2>Breakdown</h2>
+      <div class="bar-track">
+        <div class="bar-seg" id="bar1" style="background:#0ea5e9;width:50%"></div>
+        <div class="bar-seg" id="bar2" style="background:#10b981;width:20%"></div>
+        <div class="bar-seg" id="bar3" style="background:#8b5cf6;width:20%"></div>
+        <div class="bar-seg" id="bar4" style="background:#f59e0b;width:10%"></div>
+      </div>
+    </div>
+
+    <!-- Pie Chart + Legend -->
+    <div class="chart-section">
+      <div class="pie-wrap">
+        <canvas id="pieChart" width="180" height="180"></canvas>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#0ea5e9"></div>
+          <span class="legend-label">Essentials</span>
+          <span class="legend-val" id="leg1">₹0</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#10b981"></div>
+          <span class="legend-label">Savings</span>
+          <span class="legend-val" id="leg2">₹0</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#8b5cf6"></div>
+          <span class="legend-label">Investments</span>
+          <span class="legend-val" id="leg3">₹0</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#f59e0b"></div>
+          <span class="legend-label">Luxury</span>
+          <span class="legend-val" id="leg4">₹0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Advice -->
+    <div class="advice-box good" id="adviceBox">
+      <div class="advice-icon">✅</div>
+      <div>
+        <div class="advice-title" id="adviceTitle">Good financial planning</div>
+        <div class="advice-text" id="adviceText">Your savings allocation is healthy. Keep it up to build a strong emergency fund and long-term wealth.</div>
+      </div>
+    </div>
+
+    <!-- SEO Content -->
+    <div class="seo-content">
+      <h2>What is the 50-20-20-10 Rule?</h2>
+      <p>The 50-20-20-10 budget rule helps you allocate your monthly salary wisely: 50% for Essentials (rent, food, utilities), 20% for Savings (emergency fund), 20% for Investments (SIP, stocks, mutual funds), and 10% for Luxury (entertainment, travel, dining out).</p>
+      <h2>How to use this Smart Salary Calculator?</h2>
+      <p>Enter your monthly take-home salary in the input field. The calculator instantly shows how much you should spend in each category. You can also edit the percentages to match your personal budget goals.</p>
+      <div class="tags">
+        <span class="tag">Salary Budget Planner</span>
+        <span class="tag">50-20-20-10 Rule</span>
+        <span class="tag">Monthly Budget India</span>
+        <span class="tag">Savings Calculator</span>
+        <span class="tag">Investment Planning</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Shree Calculator Hub. All rights reserved. &nbsp;|&nbsp; <a href="/">← Back to all calculators</a></p>
+</footer>
+
+<script>
+  const salaryInput = document.getElementById('salaryInput');
+  const pct1 = document.getElementById('pct1');
+  const pct2 = document.getElementById('pct2');
+  const pct3 = document.getElementById('pct3');
+  const pct4 = document.getElementById('pct4');
+  const canvas = document.getElementById('pieChart');
+  const ctx = canvas.getContext('2d');
+  const colors = ['#0ea5e9', '#10b981', '#8b5cf6', '#f59e0b'];
+
+  function fmt(n) {
+    return '₹' + Math.round(n).toLocaleString('en-IN');
+  }
+
+  function drawPie(slices) {
+    const cx = canvas.width / 2, cy = canvas.height / 2, r = 78;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const total = slices.reduce((a, b) => a + b, 0);
+    if (total <= 0) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#1e293b';
+      ctx.fill();
+      return;
+    }
+    let start = -Math.PI / 2;
+    slices.forEach((val, i) => {
+      const angle = (val / total) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, start, start + angle);
+      ctx.closePath();
+      ctx.fillStyle = colors[i];
+      ctx.fill();
+      // gap
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, start, start + angle);
+      ctx.closePath();
+      ctx.strokeStyle = '#0a0f1e';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      start += angle;
+    });
+    // inner circle (donut)
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 0.55, 0, Math.PI * 2);
+    ctx.fillStyle = '#0f172a';
+    ctx.fill();
+  }
+
+  function calculate() {
+    const salary = parseFloat(salaryInput.value) || 0;
+    const p1 = parseFloat(pct1.value) || 0;
+    const p2 = parseFloat(pct2.value) || 0;
+    const p3 = parseFloat(pct3.value) || 0;
+    const p4 = parseFloat(pct4.value) || 0;
+    const total = p1 + p2 + p3 + p4;
+
+    // Warning
+    const warn = document.getElementById('pctWarning');
+    document.getElementById('totalPct').textContent = total;
+    warn.style.display = (total !== 100) ? 'block' : 'none';
+
+    const a1 = salary * p1 / 100;
+    const a2 = salary * p2 / 100;
+    const a3 = salary * p3 / 100;
+    const a4 = salary * p4 / 100;
+
+    document.getElementById('amt1').textContent = fmt(a1);
+    document.getElementById('amt2').textContent = fmt(a2);
+    document.getElementById('amt3').textContent = fmt(a3);
+    document.getElementById('amt4').textContent = fmt(a4);
+    document.getElementById('leg1').textContent = fmt(a1);
+    document.getElementById('leg2').textContent = fmt(a2);
+    document.getElementById('leg3').textContent = fmt(a3);
+    document.getElementById('leg4').textContent = fmt(a4);
+
+    // Bar
+    document.getElementById('bar1').style.width = p1 + '%';
+    document.getElementById('bar2').style.width = p2 + '%';
+    document.getElementById('bar3').style.width = p3 + '%';
+    document.getElementById('bar4').style.width = p4 + '%';
+
+    // Pie
+    drawPie([p1, p2, p3, p4]);
+
+    // Advice
+    const box = document.getElementById('adviceBox');
+    const title = document.getElementById('adviceTitle');
+    const text = document.getElementById('adviceText');
+    if (p2 < 20) {
+      box.className = 'advice-box warn';
+      document.querySelector('.advice-icon').textContent = '⚠️';
+      title.textContent = 'Warning: Increase your savings!';
+      text.textContent = 'Your savings are below 20%. Try to reduce luxury expenses and redirect that money to your emergency fund.';
+    } else {
+      box.className = 'advice-box good';
+      document.querySelector('.advice-icon').textContent = '✅';
+      title.textContent = 'Good financial planning!';
+      text.textContent = 'Your savings allocation is healthy. Keep it up to build a strong emergency fund and long-term wealth.';
+    }
+  }
+
+  [salaryInput, pct1, pct2, pct3, pct4].forEach(el => el.addEventListener('input', calculate));
+
+  // Init
+  salaryInput.value = '50000';
+  calculate();
+</script>
+</body>
+</html>

@@ -1015,6 +1015,12 @@ export default function App() {
           </div>
 
           <nav className="hidden md:flex items-center gap-2">
+            <a
+              href="/salary-calculator"
+              className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 hover:bg-amber-500/20 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+            >
+              <span>★</span> Smart Salary Calculator
+            </a>
             <button 
               onClick={() => copyToClipboard(window.location.href)}
               className="p-2 text-slate-400 hover:text-sky-400 hover:bg-slate-800/50 rounded-xl transition-all"
@@ -2518,6 +2524,7 @@ export default function App() {
             <div>
               <h4 className="text-white font-bold mb-6">Other Tools</h4>
               <ul className="space-y-4 text-sm text-slate-500">
+                <li><a href="/salary-calculator" className="hover:text-sky-400 transition-colors flex items-center gap-1.5"><span className="text-amber-400 text-xs">★</span> Smart Salary Calculator</a></li>
                 <li><button onClick={() => { setActiveTab('construction'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors">Construction Estimator</button></li>
                 <li><button onClick={() => { setActiveTab('bmi'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors">BMI Calculator</button></li>
                 <li><button onClick={() => { setActiveTab('age'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-sky-400 transition-colors">Age Calculator</button></li>
